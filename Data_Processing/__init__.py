@@ -1,0 +1,1 @@
+from .rescuenet_dataset import RescueNetDataModule
