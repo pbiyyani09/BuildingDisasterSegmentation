@@ -5,31 +5,39 @@ from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint
 
 # Import your custom modules
 # Make sure __init__.py files are set up correctly
-from Data_Processing import RescueNetDataModule
-from Model import EnhancedUNetNew, RescueNetLightning, ValidationImageLogger
+from Data_Processing import RescueNetDataModuleNew 
+from Model import EnhancedUNetNew, RescueNetLightningNew, ValidationImageLogger
 
 # This is required for the trainer to find the EnhancedUNet class
 # when loading the model from a checkpoint.
-from Model.segmentor_model import *
+from Model.segmentor_model_test import *
 
 
 def train():
+    print("--- Starting Training ---")
+    # Set tensor core precision for RTX 4080 SUPER
+    torch.set_float32_matmul_precision('medium')  # Add this line
+    
     """Main training function."""
     # 1. Load Configuration
-    config = toml.load("./Options/config.toml")
+    config = toml.load("./Options/confignew.toml")
+
     model_config = config['MODEL']
     training_config = config['TRAINING']
     data_config = config['DATA']
     path_config = config['PATHS']
 
+    print(f"Configuration loaded: {config}")
     # 2. Setup DataModule
-    data_module = RescueNetDataModule(**data_config)
+    data_module = RescueNetDataModuleNew(**data_config)
+    print(f"DataModule initialized with data directory: {data_config['data_dir']}")
 
     # 3. Setup LightningModule
-    lightning_model = RescueNetLightning( 
+    lightning_model = RescueNetLightningNew( 
         model_config=model_config,
         training_config=training_config
     )
+    print("LightningModule initialized with model and training configurations.")
 
     # 4. Setup Callbacks
     # Logger for TensorBoard
@@ -49,7 +57,7 @@ def train():
 
     # Save the model from the last epoch
     last_model_checkpoint = ModelCheckpoint(filename='last-{epoch}')
-    
+
     # Save validation prediction images
     image_logger = ValidationImageLogger(save_dir=path_config['debug_image_dir'])
 
@@ -65,7 +73,10 @@ def train():
             best_model_checkpoint,
             last_model_checkpoint,
             image_logger
-        ]
+        ],
+        accumulate_grad_batches=2,  # Simulates batch_size * 2 = 16
+        gradient_clip_val=1.0,      # Prevents gradient explosion
+        gradient_clip_algorithm="norm",  # Use norm-based clipping
     )
 
     # 6. Start Training

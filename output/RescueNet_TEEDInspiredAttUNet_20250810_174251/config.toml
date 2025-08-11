@@ -1,0 +1,28 @@
+[experiment]
+name = "RescueNet_TEEDInspiredAttUNet"
+output_dir = "output"
+
+[dataset]
+data_dir = "./Data/RescueNet"
+batch_size = 4
+num_workers = 8
+image_size = 512
+
+[model]
+input_channels = 3
+num_classes = 11
+use_aux_loss = false
+model_type = "TEEDInspiredAttUNet"
+
+[optimizer]
+base_lr = 0.001
+momentum = 0.9
+weight_decay = 1e-5
+power = 0.9
+
+[training]
+epochs = 200
+seed = 42
+
+[logging]
+log_interval = 10

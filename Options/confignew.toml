@@ -1,0 +1,39 @@
+[MODEL]
+in_channels = 3
+num_classes = 11
+ignore_index = 255 # A class index to ignore in loss and metrics
+
+[TRAINING]
+# AdamW optimizer parameters (changed from AdamW to match new optimizer)
+learning_rate = 0.001
+weight_decay = 0.0001  # Increased from 0.00001 for better regularization
+
+# Scheduler: CosineAnnealingWarmRestarts (changed from old scheduler)
+restart_epochs = 10     # Changed from 5 - T_0: The number of epochs for the first restart
+min_lr = 1e-7          # The minimum learning rate
+
+# NEW: Focal Loss parameters
+focal_alpha = 0.25     # Alpha parameter for focal loss
+focal_gamma = 2.0      # Gamma parameter for focal loss
+
+# Loss (unchanged)
+aux_loss_weight = 0.4
+
+# Trainer settings
+epochs = 200
+accelerator = "gpu" # Use "gpu" or "cpu"
+devices = 1         # Number of devices to use
+precision = "16-mixed" # Changed from "32-true" for memory efficiency
+
+[DATA]
+# Path is relative to the project root where train.py is located
+data_dir = "/mnt/e/drone_disaster/BuildingDisasterSegmentation/Data/RescueNet"
+batch_size = 8
+num_workers = 4
+image_size = [256, 256] # Height, Width
+
+[PATHS]
+# Where to save logs and model checkpoints
+log_dir = "./Training_Logs"
+# Where to save debug images during validation
+debug_image_dir = "./Debug_Images"

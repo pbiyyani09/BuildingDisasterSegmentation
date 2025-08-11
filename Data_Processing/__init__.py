@@ -1,1 +1,3 @@
 from .rescuenet_dataset import RescueNetDataModule
+from .rescuenet_dataset_test import RescueNetDataModuleNew
+
