@@ -3,7 +3,9 @@ from torch import nn
 import torch.nn.functional as F
 import pytorch_lightning as pl
 from torchmetrics import Metric
-from . import EnhancedUNet
+# EnhancedUNet was renamed EnhancedUNetNew in segmentor_model_test.py;
+# alias keeps this trainer's constructor call working.
+from .segmentor_model_test import EnhancedUNetNew as EnhancedUNet
 
 # --- Helper Function for Metrics ---
 # This is the GPU-accelerated IoU calculation you provided

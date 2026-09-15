@@ -3,7 +3,7 @@ from torch import nn
 import torch.nn.functional as F
 import pytorch_lightning as pl
 from torchmetrics import Metric
-from . import EnhancedUNetNew
+from .segmentor_model_test import EnhancedUNetNew
 
 # --- NEW: Import the compound loss function ---
 import numpy as np

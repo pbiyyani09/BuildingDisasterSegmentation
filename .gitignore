@@ -1,7 +1,35 @@
+# --- Project data / artifacts ---
 Data/
 TrainDroneModel/
 Test_Results/
 Debug_Images/
 Training_Logs/
 Val_Results/
+output/
 
+# Model checkpoints / logs
+*.ckpt
+*.pth
+*.pt
+events.out.tfevents.*
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Tooling / IDE
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
